@@ -1,10 +1,10 @@
 
-name: Deploy  package
+name: Deploy package
 
 on:
   push:
     branches:
-      - "master"
+      - "main"
 
 jobs:
   publish:
