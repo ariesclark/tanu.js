@@ -1,7 +1,7 @@
 # Tanu 🦝
 A *over*simplification of the TypeScript Compiler API for defining and generating source files.
 
-[![npm](https://img.shields.io/npm/v/tanu)](https://npm.im/tanu) [![GitHub issues](https://img.shields.io/github/issues/ariesclark/tanu.js) ![GitHub Repo stars](https://img.shields.io/github/stars/ariesclark/oily.js?style=social)](https://github.com/ariesclark/tanu.js)
+[![npm](https://img.shields.io/npm/v/tanu)](https://npm.im/tanu) [![GitHub issues](https://img.shields.io/github/issues/ariesclark/tanu.js) ![GitHub Repo stars](https://img.shields.io/github/stars/ariesclark/tanu.js?style=social)](https://github.com/ariesclark/tanu.js)
 
 - [Tanu 🦝](#tanu-)
     - [Why?](#why)
