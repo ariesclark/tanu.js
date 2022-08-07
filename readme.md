@@ -21,13 +21,13 @@ Yes Matt, It does exist now.
 ### How do I use this?
 ```ts
 const User = t.interface("User", {
-	id: t.number(),
-	email: t.string(),
-	name: t.optional({
-		first: t.string(),
-		last: t.string()
-	})
-})
+  id: t.number(),
+  email: t.string(),
+  name: t.optional({
+    first: t.string(),
+    last: t.string()
+  })
+});
 
 const MemberRole = t.enum("MemberRole", [
   "DEFAULT",
