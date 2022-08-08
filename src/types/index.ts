@@ -75,7 +75,7 @@ export { enum_ as enum };
  * @param name The name of the enum.
  * @param values An array of enum members.
  */
-export function enum_(name: string, values: Array<string>): ts.EnumDeclaration {
+function enum_(name: string, values: Array<string>): ts.EnumDeclaration {
 	return ts.factory.createEnumDeclaration(
 		undefined,
 		[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],

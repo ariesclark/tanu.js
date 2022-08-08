@@ -43,6 +43,10 @@ export function any() {
 	return ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword);
 }
 
+export function unknown() {
+	return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword);
+}
+
 /**
  * "undefined" is a reserved keyword.
  */
