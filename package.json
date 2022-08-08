@@ -1,7 +1,7 @@
 {
   "name": "tanu",
-  "version": "0.1.3",
-  "description": "An oversimplification of the TypeScript Compiler API for defining and generating source files",
+  "version": "0.1.4",
+  "description": "Generate TypeScript types and interfaces using JavaScript or TypeScript code",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
