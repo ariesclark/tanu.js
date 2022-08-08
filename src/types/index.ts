@@ -51,6 +51,7 @@ function interface_(name: string, properties: TypeDefinitionObject): ts.Interfac
 export interface ModuleOptions {
 	declare?: boolean;
 	namespace?: boolean;
+	global?: boolean;
 }
 
 export function module(
@@ -59,8 +60,9 @@ export function module(
 	options: ModuleOptions = {}
 ): ts.ModuleDeclaration {
 	let flags = ts.NodeFlags.None;
+
+	if (name === "global" || options.global) flags |= ts.NodeFlags.GlobalAugmentation;
 	if (options.namespace) flags |= ts.NodeFlags.Namespace;
-	if (name === "global") flags |= ts.NodeFlags.GlobalAugmentation;
 
 	return ts.factory.createModuleDeclaration(
 		undefined,
@@ -69,6 +71,18 @@ export function module(
 		ts.factory.createModuleBlock(statements),
 		flags
 	);
+}
+
+/**
+ * Shorthand for creating a module namespace, this is equivalent to
+ * ``t.module(name, statements, { ...options, namespace: true })``.
+ */
+export function namespace(
+	name: string,
+	statements: Array<ts.InterfaceDeclaration | ts.ModuleDeclaration>,
+	options: ModuleOptions = {}
+): ts.ModuleDeclaration {
+	return module(name, statements, { ...options, namespace: true });
 }
 
 /**
