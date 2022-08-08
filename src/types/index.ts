@@ -48,6 +48,29 @@ function interface_(name: string, properties: TypeDefinitionObject): ts.Interfac
 	);
 }
 
+export interface ModuleOptions {
+	declare?: boolean;
+	namespace?: boolean;
+}
+
+export function module(
+	name: string,
+	statements: Array<ts.InterfaceDeclaration | ts.ModuleDeclaration>,
+	options: ModuleOptions = {}
+): ts.ModuleDeclaration {
+	let flags = ts.NodeFlags.None;
+	if (options.namespace) flags |= ts.NodeFlags.Namespace;
+	if (name === "global") flags |= ts.NodeFlags.GlobalAugmentation;
+
+	return ts.factory.createModuleDeclaration(
+		undefined,
+		options.declare ? [ts.factory.createModifier(ts.SyntaxKind.DeclareKeyword)] : undefined,
+		ts.factory.createIdentifier(name),
+		ts.factory.createModuleBlock(statements),
+		flags
+	);
+}
+
 /**
  * Create an explicit type.
  *
