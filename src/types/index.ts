@@ -190,10 +190,23 @@ export function property(name: string, definition: TypeDefinition): ts.PropertyS
 		  ts.factory.createToken(ts.SyntaxKind.QuestionToken)
 		: undefined;
 
+	const modifiers: Array<ts.Modifier> = [];
+	if (
+		ts.isTypeReferenceNode(node) &&
+		ts.isIdentifier(node.typeName) &&
+		node.typeName.escapedText === "Readonly"
+	)
+		modifiers.push(ts.factory.createToken(ts.SyntaxKind.ReadonlyKeyword));
+
 	const propertyComments = ts.getSyntheticLeadingComments(node) ?? [];
 	if (propertyComments.length !== 0) ts.setSyntheticLeadingComments(node, []);
 
-	const tsPropertySignature = ts.factory.createPropertySignature(undefined, name, optional, node);
+	const tsPropertySignature = ts.factory.createPropertySignature(
+		modifiers.length ? modifiers : undefined,
+		name,
+		optional,
+		node
+	);
 
 	return propertyComments.length !== 0
 		? ts.setSyntheticLeadingComments(tsPropertySignature, propertyComments)
@@ -214,6 +227,13 @@ export function union(definitions: Array<TypeDefinition>): ts.UnionTypeNode {
 }
 
 /**
+ * @param definitions An array of type definitions.
+ */
+export function intersection(definitions: Array<TypeDefinition>): ts.IntersectionTypeNode {
+	return ts.factory.createIntersectionTypeNode(definitions.map(toNode));
+}
+
+/**
  * Create an array type from a type definition.
  * @param definition The type definition.
  */
@@ -229,6 +249,10 @@ export function array(definition: TypeDefinition) {
  */
 export function optional(definition: TypeDefinition) {
 	return union([definition, undefined_()]);
+}
+
+export function readonly(definition: TypeDefinition) {
+	return reference("Readonly", [definition]);
 }
 
 /**

@@ -61,7 +61,10 @@ void (async () => {
 		role: MemberRole
 	});
 
+	const Foo = t.type("Foo", t.intersection([1, 2]));
+
 	const Organization = t.interface("Organization", {
+		id: t.readonly(t.number()),
 		name: t.comment(t.string(), [
 			"The organization name",
 			"@see https://example.com/organization-name"
@@ -70,6 +73,6 @@ void (async () => {
 		members: t.array(Member)
 	});
 
-	const result = await t.generate([User, MemberRole, Member, Organization]);
+	const result = await t.generate([User, MemberRole, Member, Organization, Foo]);
 	console.log(result);
 })();
