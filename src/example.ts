@@ -75,6 +75,18 @@ void (async () => {
 
 	const a = t.const("a", t.propertyOf(MemberRole, "DEFAULT"));
 
-	const result = await t.generate([User, MemberRole, Member, Organization, Foo, a]);
+	const RecursiveInterface = t.interface("RecursiveInterface", () => ({
+		foo: RecursiveInterface
+	}));
+
+	const result = await t.generate([
+		User,
+		MemberRole,
+		Member,
+		Organization,
+		Foo,
+		a,
+		RecursiveInterface
+	]);
 	console.log(result);
 })();
