@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 
 import { TypeDefinitionObject } from "..";
+import { setLazy } from "../../utils";
 import { typeProperty } from "../utils";
 
 /**
@@ -36,15 +37,5 @@ function interface_(
 	properties: TypeDefinitionObject | (() => TypeDefinitionObject)
 ): ts.InterfaceDeclaration {
 	if (typeof properties !== "function") return constructInterface(name, properties);
-
-	let tentativeInterface = constructInterface(name, {});
-	setImmediate(() => {
-		tentativeInterface = constructInterface(name, properties());
-	});
-
-	return new Proxy(tentativeInterface, {
-		get(_, property, receiver) {
-			return Reflect.get(tentativeInterface, property, receiver);
-		}
-	});
+	return setLazy(constructInterface(name, {}), () => constructInterface(name, properties()));
 }

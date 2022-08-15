@@ -18,3 +18,17 @@ export function isNode(value: unknown): value is ts.Node {
 		!!ts.SyntaxKind[(value as ts.Node).kind]
 	);
 }
+
+export function setLazy<T extends object>(defaultValue: T, immediateValue: () => T) {
+	let value = defaultValue;
+
+	setImmediate(() => {
+		value = immediateValue();
+	});
+
+	return new Proxy(defaultValue, {
+		get(_, property, receiver) {
+			return Reflect.get(value, property, receiver);
+		}
+	});
+}
