@@ -97,20 +97,33 @@ Passing in a callback to the `t.interface` method will lazily populate the inter
 ```ts
 import { t } from "tanu.js";
 
-const User = t.interface("User", () => {
-  return {
-    users: t.array(User),
-    posts: t.array(Post),
-  };
+const User = t.interface("User", () => ({
+  users: t.array(User),
+  posts: t.array(Post),
+  authoredComments: t.array(Comment),
+}));
+
+const Post = t.interface("Post", () => ({
+  author: User,
+  text: t.string(),
+  images: t.array(t.string()),
+  postComments: t.array(Comment),
+}));
+
+const Comment = t.interface("Comment", {
+  author: User,
+  post: Post,
+  text: t.string(),
 });
 
-const Post = t.interface("Post", () => {
-  return {
-    author: User,
-  };
-});
+const CommentReply = t.type("CommentReply", () => ({
+  parent: CommentReply,
+  author: User,
+  post: Post,
+  text: t.string(),
+}));
 
-const result = await t.generate([User, Post]);
+const result = await t.generate([User, Post, Comment, CommentReply]);
 console.log(result);
 ```
 
@@ -120,8 +133,23 @@ console.log(result);
 export interface User {
   users: Array<User>;
   posts: Array<Post>;
+  authoredComments: Array<Comment>;
 }
 export interface Post {
   author: User;
+  text: string;
+  images: Array<string>;
+  postComments: Array<Comment>;
 }
+export interface Comment {
+  author: User;
+  post: Post;
+  text: string;
+}
+export type CommentReply = {
+  parent: CommentReply;
+  author: User;
+  post: Post;
+  text: string;
+};
 ```
