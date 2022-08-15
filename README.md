@@ -89,3 +89,39 @@ export interface Organization {
   members: Array<Member>;
 }
 ```
+
+### What about interfaces that reference themselves, or cross-reference each other?
+
+Passing in a callback to the `t.interface` method will lazily populate the interface with its returned values. This will ensure that you can self-reference or cross-reference the interface, and it will be available by generation.
+
+```ts
+import { t } from "tanu.js";
+
+const User = t.interface("User", () => {
+  return {
+    users: t.array(User),
+    posts: t.array(Post),
+  };
+});
+
+const Post = t.interface("Post", () => {
+  return {
+    author: User,
+  };
+});
+
+const result = await t.generate([User, Post]);
+console.log(result);
+```
+
+```ts
+// the generated result
+
+export interface User {
+  users: Array<User>;
+  posts: Array<Post>;
+}
+export interface Post {
+  author: User;
+}
+```
