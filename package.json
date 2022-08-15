@@ -1,6 +1,6 @@
 {
   "name": "tanu",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Generate TypeScript types and interfaces using JavaScript or TypeScript code",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
