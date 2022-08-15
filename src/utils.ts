@@ -1,15 +1,13 @@
 import * as ts from "typescript";
 
-import {
-	literal,
-	reference,
-	TypeDefinition,
-	TypeDefinitionPlain,
-	TypeReferenceLike
-} from "./types";
+export type Primitive = string | number | boolean | bigint /*| symbol */;
 
-export function isTypeDefinitionPlain(value: unknown): value is TypeDefinitionPlain {
-	return typeof value === "string" || typeof value === "number" || typeof value === "boolean";
+export const PrimitiveTypes = ["string", "number", "boolean", "bigint" /*, "symbol" */] as const;
+export type PrimitiveTypes = typeof PrimitiveTypes[number];
+
+export function isPrimitive(value: unknown): value is Primitive {
+	// @ts-expect-error: Readonly array include wants explicit value.
+	return PrimitiveTypes.includes(typeof value);
 }
 
 export function isNode(value: unknown): value is ts.Node {
@@ -19,21 +17,4 @@ export function isNode(value: unknown): value is ts.Node {
 		"kind" in value &&
 		!!ts.SyntaxKind[(value as ts.Node).kind]
 	);
-}
-
-export function isTypeReferenceLike(value: unknown): value is TypeReferenceLike {
-	return (
-		isNode(value) &&
-		(ts.isTypeNode(value) ||
-			ts.isTypeAliasDeclaration(value) ||
-			ts.isInterfaceDeclaration(value) ||
-			ts.isEnumDeclaration(value))
-	);
-}
-
-export function toNode(definition: TypeDefinition): ts.TypeNode {
-	return isTypeReferenceLike(definition)
-		? reference(definition)
-		: // @todo: this type cast is a lie, but typescript complained about overloads.
-		  literal(definition as TypeDefinitionPlain);
 }

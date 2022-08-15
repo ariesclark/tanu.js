@@ -1,6 +1,6 @@
 import * as ts from "typescript";
 
-import { reference } from ".";
+import { reference } from "..";
 
 /**
  * Create a string primitive.

@@ -73,6 +73,8 @@ void (async () => {
 		members: t.array(Member)
 	});
 
-	const result = await t.generate([User, MemberRole, Member, Organization, Foo]);
+	const a = t.const("a", t.propertyOf(MemberRole, "DEFAULT"));
+
+	const result = await t.generate([User, MemberRole, Member, Organization, Foo, a]);
 	console.log(result);
 })();
