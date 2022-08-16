@@ -11,15 +11,8 @@ export type PrimitiveRuntimeLiteral =
 	| BooleanRuntimeLiteral
 	| ts.BigIntLiteral;
 
-export function toRuntimeNode(definition: RuntimeDefinition, reference: boolean = true) {
-	if (reference && isReferenceLike(definition))
-		return ts.factory.createIdentifier(definition.name.text);
-
-	return isNode(definition) ? definition : runtimeLiteral(definition);
-}
-
 export function isReferenceLike(value: unknown): value is ReferenceLike {
-	return isNode(value) && ts.isEnumDeclaration(value);
+	return isNode(value) && (ts.isEnumDeclaration(value) || ts.isVariableStatement(value));
 }
 
 export function isRuntimeDefinitionObject(object: unknown): object is RuntimeDefinitionObject {
@@ -34,6 +27,19 @@ export function isRuntimeDefinitionObject(object: unknown): object is RuntimeDef
 
 export function isRuntimeDefinition(value: unknown): value is RuntimeDefinition {
 	return isReferenceLike(value) || isRuntimeDefinitionObject(value) || isPrimitive(value);
+}
+
+export function toRuntimeNode(definition: RuntimeDefinition, reference: boolean = true) {
+	if (reference && isReferenceLike(definition)) return runtimeReference(definition);
+	return isNode(definition) ? definition : runtimeLiteral(definition);
+}
+
+export function runtimeReference(definition: ReferenceLike) {
+	const name = ts.isVariableStatement(definition)
+		? (definition.declarationList.declarations[0].name as ts.Identifier).text
+		: definition.name.text;
+
+	return ts.factory.createIdentifier(name);
 }
 
 /**

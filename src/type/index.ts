@@ -1,8 +1,10 @@
 import * as ts from "typescript";
 
+import { ReferenceLike } from "../runtime";
+import { runtimeReference } from "../runtime/utils";
 import { Primitive } from "../utils";
 
-import { toTypeNode } from "./utils";
+import { toTypeNode, typeLiteral } from "./utils";
 
 export * from "./composites";
 export * from "./declarations";
@@ -65,4 +67,17 @@ export function reference(
  */
 export function array(definition: TypeDefinition) {
 	return ts.factory.createTypeReferenceNode("Array", [toTypeNode(definition)]);
+}
+
+/**
+ * "typeof" is a reserved keyword.
+ */
+export { typeof_ as typeof };
+
+function typeof_(value: ReferenceLike) {
+	return ts.factory.createTypeQueryNode(runtimeReference(value));
+}
+
+export function indexOf(definition: TypeDefinition, index: string | number) {
+	return ts.factory.createIndexedAccessTypeNode(toTypeNode(definition), typeLiteral(index));
 }

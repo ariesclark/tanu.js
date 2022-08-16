@@ -1,10 +1,12 @@
 import * as ts from "typescript";
 
+import { reference, TypeDefinition } from "../type";
+import { toTypeNode } from "../type/utils";
 import { Primitive } from "../utils";
 
 import { toRuntimeNode } from "./utils";
 
-export type ReferenceLike = ts.EnumDeclaration;
+export type ReferenceLike = ts.EnumDeclaration | ts.VariableStatement;
 
 export interface RuntimeDefinitionObject {
 	[K: string]: RuntimeDefinition;
@@ -17,13 +19,16 @@ export * from "./statements";
 export function propertyOf(definition: RuntimeDefinition, key: string): ts.PropertyAccessExpression;
 export function propertyOf(definition: RuntimeDefinition, key: number): ts.ElementAccessExpression;
 export function propertyOf(definition: RuntimeDefinition, key: string | number) {
-	if (typeof key === "number") return indexOf(definition, key);
-	return ts.factory.createPropertyAccessExpression(toRuntimeNode(definition) as ts.Expression, key);
+	const node = toRuntimeNode(definition) as ts.Expression;
+
+	if (typeof key === "number") return ts.factory.createElementAccessExpression(node, key);
+	return ts.factory.createPropertyAccessExpression(node, key);
 }
 
-export function indexOf(definition: RuntimeDefinition, index: number): ts.ElementAccessExpression {
-	return ts.factory.createElementAccessExpression(
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function as(definition: RuntimeDefinition, type: (TypeDefinition & {}) | "const") {
+	return ts.factory.createAsExpression(
 		toRuntimeNode(definition) as ts.Expression,
-		index
+		type === "const" ? reference("const") : toTypeNode(type)
 	);
 }

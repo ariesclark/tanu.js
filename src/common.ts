@@ -1,7 +1,7 @@
 import * as ts from "typescript";
 
 import { RuntimeDefinition } from "./runtime";
-import { isRuntimeDefinition, toRuntimeNode } from "./runtime/utils";
+import { toRuntimeNode } from "./runtime/utils";
 import { TypeDefinition } from "./type";
 import { isTypeDefinition, toTypeNode } from "./type/utils";
 

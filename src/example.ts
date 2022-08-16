@@ -75,11 +75,19 @@ void (async () => {
 
 	const a = t.const("a", t.propertyOf(MemberRole, "DEFAULT"));
 
-	const b = t.const("b", {
-		foo: {
-			"bar/baz": true
-		}
-	});
+	const b = t.const(
+		"b",
+		t.as(
+			{
+				foo: {
+					"bar/baz": true
+				}
+			},
+			"const"
+		)
+	);
+
+	const B = t.type("B", t.indexOf(t.typeof(b), "foo"));
 
 	const RecursiveInterface = t.interface("RecursiveInterface", () => ({
 		foo: RecursiveInterface
@@ -93,6 +101,7 @@ void (async () => {
 		Foo,
 		a,
 		b,
+		B,
 		RecursiveInterface
 	]);
 	console.log(result);
