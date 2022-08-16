@@ -1,10 +1,27 @@
+import fs from "fs/promises";
+
 import * as ts from "typescript";
+export interface GenerateOptions {
+	banner?: string;
+}
+
+function getDefaultBanner(): string {
+	return `/* eslint-disable */
+// Generated using Tanu.js (https://github.com/ariesclark/tanu.js)
+// Content generated is licensed under the MIT License.
+`;
+}
 
 /**
  * Generate the file source as a string.
  * @param nodes An array of nodes.
  */
-export async function generate(nodes: Array<ts.Node>): Promise<string> {
+export async function generate(
+	nodes: Array<ts.Node>,
+	options: GenerateOptions = {}
+): Promise<string> {
+	options.banner ??= getDefaultBanner();
+
 	const file = ts.createSourceFile("", "", ts.ScriptTarget.ESNext, true);
 	const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 
@@ -17,10 +34,19 @@ export async function generate(nodes: Array<ts.Node>): Promise<string> {
 					file
 				);
 
-				resolve(printedNodes);
+				resolve(`${options.banner}\n${printedNodes}`);
 			});
 		} catch (error) {
 			reject(error);
 		}
 	});
+}
+
+export async function generateFile(
+	path: string,
+	nodes: Array<ts.Node>,
+	options: GenerateOptions = {}
+): Promise<void> {
+	const source = await generate(nodes, options);
+	await fs.writeFile(path, source, "utf-8");
 }
