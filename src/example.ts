@@ -75,6 +75,12 @@ void (async () => {
 
 	const a = t.const("a", t.propertyOf(MemberRole, "DEFAULT"));
 
+	const b = t.const("b", {
+		foo: {
+			"bar/baz": true
+		}
+	});
+
 	const RecursiveInterface = t.interface("RecursiveInterface", () => ({
 		foo: RecursiveInterface
 	}));
@@ -86,6 +92,7 @@ void (async () => {
 		Organization,
 		Foo,
 		a,
+		b,
 		RecursiveInterface
 	]);
 	console.log(result);

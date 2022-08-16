@@ -52,7 +52,10 @@ export function runtimeProperty(
 	const propertyComments = ts.getSyntheticLeadingComments(node) ?? [];
 	if (propertyComments.length !== 0) ts.setSyntheticLeadingComments(node, []);
 
-	const tsPropertySignature = ts.factory.createPropertyAssignment(name, node as ts.Expression);
+	const tsPropertySignature = ts.factory.createPropertyAssignment(
+		runtimeLiteral(name),
+		node as ts.Expression
+	);
 
 	return propertyComments.length !== 0
 		? ts.setSyntheticLeadingComments(tsPropertySignature, propertyComments)
@@ -65,6 +68,9 @@ export function runtimeProperty(
  *
  * @param definition A primitive, like a number or a boolean.
  */
+export function runtimeLiteral(definition: string): ts.StringLiteral;
+export function runtimeLiteral(definition: number): ts.NumericLiteral;
+export function runtimeLiteral(definition: boolean): BooleanRuntimeLiteral;
 export function runtimeLiteral(definition: Primitive): PrimitiveRuntimeLiteral;
 export function runtimeLiteral(definition: RuntimeDefinitionObject): ts.ObjectLiteralExpression;
 export function runtimeLiteral(
