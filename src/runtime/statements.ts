@@ -19,7 +19,7 @@ function variableStatement(
 	const node = toRuntimeNode(definition);
 
 	return ts.factory.createVariableStatement(
-		undefined,
+		[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
 		ts.factory.createVariableDeclarationList(
 			[ts.factory.createVariableDeclaration(name, undefined, options.type, node as ts.Expression)],
 			{

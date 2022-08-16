@@ -93,7 +93,7 @@ void (async () => {
 		foo: RecursiveInterface
 	}));
 
-	const result = await t.generate([
+	await t.generateFile("./src/example.out.ts", [
 		User,
 		MemberRole,
 		Member,
@@ -104,5 +104,4 @@ void (async () => {
 		B,
 		RecursiveInterface
 	]);
-	console.log(result);
 })();
