@@ -6,7 +6,7 @@ export interface ModuleOptions {
 	global?: boolean;
 }
 
-export function module(
+function module_(
 	name: string,
 	statements: Array<ts.InterfaceDeclaration | ts.ModuleDeclaration>,
 	options: ModuleOptions = {}
@@ -34,5 +34,10 @@ export function namespace(
 	statements: Array<ts.InterfaceDeclaration | ts.ModuleDeclaration>,
 	options: ModuleOptions = {}
 ): ts.ModuleDeclaration {
-	return module(name, statements, { ...options, namespace: true });
+	return module_(name, statements, { ...options, namespace: true });
 }
+
+/**
+ * `module` interferes with CommonJS `exports.module`.
+ */
+export { module_ as module };
