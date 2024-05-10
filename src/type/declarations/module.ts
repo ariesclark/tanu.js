@@ -17,7 +17,6 @@ function module_(
 	if (options.namespace) flags |= ts.NodeFlags.Namespace;
 
 	return ts.factory.createModuleDeclaration(
-		undefined,
 		options.declare ? [ts.factory.createModifier(ts.SyntaxKind.DeclareKeyword)] : undefined,
 		ts.factory.createIdentifier(name),
 		ts.factory.createModuleBlock(statements),

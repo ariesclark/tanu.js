@@ -9,7 +9,6 @@ import { typeProperty } from "../utils";
  */
 function constructInterface(name: string, properties: TypeDefinitionObject) {
 	return ts.factory.createInterfaceDeclaration(
-		undefined,
 		[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
 		name,
 		undefined,
