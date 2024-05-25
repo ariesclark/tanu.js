@@ -6,7 +6,7 @@ export interface ModuleOptions {
 	global?: boolean;
 }
 
-export function module(
+function module_(
 	name: string,
 	statements: Array<ts.InterfaceDeclaration | ts.ModuleDeclaration>,
 	options: ModuleOptions = {}
@@ -17,7 +17,6 @@ export function module(
 	if (options.namespace) flags |= ts.NodeFlags.Namespace;
 
 	return ts.factory.createModuleDeclaration(
-		undefined,
 		options.declare ? [ts.factory.createModifier(ts.SyntaxKind.DeclareKeyword)] : undefined,
 		ts.factory.createIdentifier(name),
 		ts.factory.createModuleBlock(statements),
@@ -34,5 +33,10 @@ export function namespace(
 	statements: Array<ts.InterfaceDeclaration | ts.ModuleDeclaration>,
 	options: ModuleOptions = {}
 ): ts.ModuleDeclaration {
-	return module(name, statements, { ...options, namespace: true });
+	return module_(name, statements, { ...options, namespace: true });
 }
+
+/**
+ * `module` interferes with CommonJS `exports.module`.
+ */
+export { module_ as module };
