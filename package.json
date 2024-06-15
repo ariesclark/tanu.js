@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "c8 ava"
+    "test": "ava",
+    "test:coverage": "c8 ava"
   },
   "keywords": [
     "typescript",

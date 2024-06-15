@@ -1,3 +1,2 @@
 export * as t from "./exports";
-
-export * as ts from "typescript";
+export { default as ts } from "typescript";

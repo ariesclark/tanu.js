@@ -7,7 +7,6 @@ import type { TypeDefinition } from "..";
 
 const constructType = (name: string, definition: TypeDefinition) => {
 	return ts.factory.createTypeAliasDeclaration(
-		undefined,
 		[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
 		name,
 		undefined,

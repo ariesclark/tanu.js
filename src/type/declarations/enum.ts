@@ -16,7 +16,6 @@ function enum_<T extends string>(
 	values: ReadonlyArray<T>
 ): ts.EnumDeclaration {
 	return ts.factory.createEnumDeclaration(
-		undefined,
 		[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
 		name,
 		values.map((value) => ts.factory.createEnumMember(value, undefined))

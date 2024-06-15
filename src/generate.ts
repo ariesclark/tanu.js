@@ -48,5 +48,5 @@ export async function generateFile(
 	options: GenerateOptions = {}
 ): Promise<void> {
 	const source = await generate(nodes, options);
-	await fs.writeFile(path, source, "utf-8");
+	await fs.writeFile(path, source, "utf8");
 }
