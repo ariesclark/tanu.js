@@ -1,6 +1,7 @@
-import { TypeDefinition } from "..";
 import { union } from "../composites";
 import { undefined as undefined_ } from "../primitives";
+
+import type { TypeDefinition } from "..";
 
 /**
  * Shorthand for marking a property as optional,

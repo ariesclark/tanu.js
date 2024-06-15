@@ -1,10 +1,11 @@
 import * as ts from "typescript";
 
-import { ReferenceLike } from "../runtime";
 import { runtimeReference } from "../runtime/utils";
-import { Primitive } from "../utils";
 
 import { toTypeNode, typeLiteral } from "./utils";
+
+import type { ReferenceLike } from "../runtime";
+import type { Primitive } from "../utils";
 
 export * from "./composites";
 export * from "./declarations";
@@ -28,7 +29,10 @@ export interface TypeDefinitionObject {
 	[K: string]: TypeDefinition;
 }
 
-export type TypeDefinition = TypeReferenceLike | TypeDefinitionObject | Primitive;
+export type TypeDefinition =
+	| TypeReferenceLike
+	| TypeDefinitionObject
+	| Primitive;
 
 /**
  * Create a reference to another type, this is primarily used
@@ -37,7 +41,10 @@ export type TypeDefinition = TypeReferenceLike | TypeDefinitionObject | Primitiv
  * @param node A string to create a artificial reference of.
  * @param typeArguments The generic parameters to pass to the referenced type.
  */
-export function reference(node: string, typeArguments?: Array<TypeDefinition>): ts.TypeNode;
+export function reference(
+	node: string,
+	typeArguments?: Array<TypeDefinition>
+): ts.TypeNode;
 /**
  * Create a reference to another type, this is primarily used
  * internally but can be used to refer to types that aren't within scope.
@@ -54,11 +61,17 @@ export function reference(
 	typeArguments: Array<TypeDefinition> = []
 ): ts.TypeNode {
 	if (typeof node === "string")
-		return ts.factory.createTypeReferenceNode(node, typeArguments.map(toTypeNode));
+		return ts.factory.createTypeReferenceNode(
+			node,
+			typeArguments.map(toTypeNode)
+		);
 
 	if (ts.isTypeNode(node)) return node;
 
-	return ts.factory.createTypeReferenceNode(node.name, typeArguments.map(toTypeNode));
+	return ts.factory.createTypeReferenceNode(
+		node.name,
+		typeArguments.map(toTypeNode)
+	);
 }
 
 /**
@@ -79,5 +92,8 @@ function typeof_(value: ReferenceLike) {
 }
 
 export function indexOf(definition: TypeDefinition, index: string | number) {
-	return ts.factory.createIndexedAccessTypeNode(toTypeNode(definition), typeLiteral(index));
+	return ts.factory.createIndexedAccessTypeNode(
+		toTypeNode(definition),
+		typeLiteral(index)
+	);
 }

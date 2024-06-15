@@ -1,8 +1,9 @@
 import * as ts from "typescript";
 
-import { TypeDefinition } from "..";
 import { setLazy } from "../../utils";
 import { toTypeNode } from "../utils";
+
+import type { TypeDefinition } from "..";
 
 const constructType = (name: string, definition: TypeDefinition) => {
 	return ts.factory.createTypeAliasDeclaration(
@@ -25,5 +26,7 @@ export function type(
 	definition: TypeDefinition | (() => TypeDefinition)
 ): ts.TypeAliasDeclaration {
 	if (typeof definition !== "function") return constructType(name, definition);
-	return setLazy(constructType(name, {}), () => constructType(name, definition()));
+	return setLazy(constructType(name, {}), () =>
+		constructType(name, definition())
+	);
 }

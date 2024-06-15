@@ -2,7 +2,7 @@ import * as ts from "typescript";
 
 import { toRuntimeNode } from "./utils";
 
-import { RuntimeDefinition } from ".";
+import type { RuntimeDefinition } from ".";
 
 export type VariableStatementKind = "const" | "let" | "var";
 
@@ -21,7 +21,14 @@ function variableStatement(
 	return ts.factory.createVariableStatement(
 		[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
 		ts.factory.createVariableDeclarationList(
-			[ts.factory.createVariableDeclaration(name, undefined, options.type, node as ts.Expression)],
+			[
+				ts.factory.createVariableDeclaration(
+					name,
+					undefined,
+					options.type,
+					node as ts.Expression
+				)
+			],
 			{
 				const: ts.NodeFlags.Const,
 				let: ts.NodeFlags.Let,
@@ -60,9 +67,9 @@ function let_(
 /**
  * "var" is a reserved keyword.
  */
-export { var_ as var };
+export { variable_ as var };
 
-function var_(
+function variable_(
 	name: string,
 	definition: RuntimeDefinition,
 	options: Omit<VariableStatementOptions, "kind"> = {}

@@ -1,8 +1,9 @@
 import * as ts from "typescript";
 
-import { TypeDefinitionObject } from "..";
 import { setLazy } from "../../utils";
 import { typeProperty } from "../utils";
+
+import type { TypeDefinitionObject } from "..";
 
 /**
  * Constructs an interface with the given name and properties.
@@ -35,6 +36,9 @@ function interface_(
 	name: string,
 	properties: TypeDefinitionObject | (() => TypeDefinitionObject)
 ): ts.InterfaceDeclaration {
-	if (typeof properties !== "function") return constructInterface(name, properties);
-	return setLazy(constructInterface(name, {}), () => constructInterface(name, properties()));
+	if (typeof properties !== "function")
+		return constructInterface(name, properties);
+	return setLazy(constructInterface(name, {}), () =>
+		constructInterface(name, properties())
+	);
 }

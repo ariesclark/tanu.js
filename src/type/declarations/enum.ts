@@ -11,7 +11,10 @@ export { enum_ as enum };
  * @param name The name of the enum.
  * @param values An array of enum members.
  */
-function enum_<T extends string>(name: string, values: ReadonlyArray<T>): ts.EnumDeclaration {
+function enum_<T extends string>(
+	name: string,
+	values: ReadonlyArray<T>
+): ts.EnumDeclaration {
 	return ts.factory.createEnumDeclaration(
 		undefined,
 		[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],

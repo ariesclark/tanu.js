@@ -1,7 +1,8 @@
 import * as ts from "typescript";
 
-import { TypeDefinition } from "..";
 import { toTypeNode } from "../utils";
+
+import type { TypeDefinition } from "..";
 
 /**
  * Describe a type which is one of many

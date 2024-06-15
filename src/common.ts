@@ -1,9 +1,10 @@
 import * as ts from "typescript";
 
-import { RuntimeDefinition } from "./runtime";
 import { toRuntimeNode } from "./runtime/utils";
-import { TypeDefinition } from "./type";
 import { isTypeDefinition, toTypeNode } from "./type/utils";
+
+import type { RuntimeDefinition } from "./runtime";
+import type { TypeDefinition } from "./type";
 
 export type AnyDefinition = RuntimeDefinition | TypeDefinition;
 
@@ -27,11 +28,23 @@ export function comment<T>(
 	definition: T,
 	comment: Array<string>
 ): T extends TypeDefinition ? ts.TypeNode : ts.Node;
-export function comment(definition: AnyDefinition, value: string | Array<string>) {
-	const node = isTypeDefinition(definition) ? toTypeNode(definition) : toRuntimeNode(definition);
+export function comment(
+	definition: AnyDefinition,
+	value: string | Array<string>
+) {
+	const node = isTypeDefinition(definition)
+		? toTypeNode(definition)
+		: toRuntimeNode(definition);
 
-	const comment = Array.isArray(value) ? `*\n * ${value.join("\n * ")}\n ` : `* ${value} `;
-	ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, comment, true);
+	const comment = Array.isArray(value)
+		? `*\n * ${value.join("\n * ")}\n `
+		: `* ${value} `;
+	ts.addSyntheticLeadingComment(
+		node,
+		ts.SyntaxKind.MultiLineCommentTrivia,
+		comment,
+		true
+	);
 
 	return node;
 }

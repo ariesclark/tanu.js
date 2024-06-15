@@ -1,11 +1,18 @@
 import * as ts from "typescript";
 
-import { isNode, isPrimitive, Primitive } from "../utils";
+import { isNode, isPrimitive, type Primitive } from "../utils";
 import { runtimeLiteral } from "../runtime/utils";
 
-import { reference, TypeDefinition, TypeDefinitionObject, TypeReferenceLike } from ".";
+import {
+	reference,
+	type TypeDefinition,
+	type TypeDefinitionObject,
+	type TypeReferenceLike
+} from ".";
 
-export function isTypeReferenceLike(value: unknown): value is TypeReferenceLike {
+export function isTypeReferenceLike(
+	value: unknown
+): value is TypeReferenceLike {
 	return (
 		isNode(value) &&
 		(ts.isTypeNode(value) ||
@@ -15,7 +22,9 @@ export function isTypeReferenceLike(value: unknown): value is TypeReferenceLike 
 	);
 }
 
-export function isTypeDefinitionObject(object: unknown): object is TypeDefinitionObject {
+export function isTypeDefinitionObject(
+	object: unknown
+): object is TypeDefinitionObject {
 	if (typeof object !== "object" || !object) return false;
 
 	for (const value of Object.values(object)) {
@@ -26,11 +35,17 @@ export function isTypeDefinitionObject(object: unknown): object is TypeDefinitio
 }
 
 export function isTypeDefinition(value: unknown): value is TypeDefinition {
-	return isTypeReferenceLike(value) || isTypeDefinitionObject(value) || isPrimitive(value);
+	return (
+		isTypeReferenceLike(value) ||
+		isTypeDefinitionObject(value) ||
+		isPrimitive(value)
+	);
 }
 
 export function toTypeNode(definition: TypeDefinition): ts.TypeNode {
-	return isTypeReferenceLike(definition) ? reference(definition) : typeLiteral(definition);
+	return isTypeReferenceLike(definition)
+		? reference(definition)
+		: typeLiteral(definition);
 }
 
 /**
@@ -40,12 +55,16 @@ export function toTypeNode(definition: TypeDefinition): ts.TypeNode {
  * @param name The property name.
  * @param definition The type definition.
  */
-export function typeProperty(name: string, definition: TypeDefinition): ts.PropertySignature {
+export function typeProperty(
+	name: string,
+	definition: TypeDefinition
+): ts.PropertySignature {
 	const node = toTypeNode(definition);
 
 	const optional = ts.isUnionTypeNode(node)
-		? node.types.find((value) => value.kind === ts.SyntaxKind.UndefinedKeyword) &&
-		  ts.factory.createToken(ts.SyntaxKind.QuestionToken)
+		? node.types.find(
+				(value) => value.kind === ts.SyntaxKind.UndefinedKeyword
+			) && ts.factory.createToken(ts.SyntaxKind.QuestionToken)
 		: undefined;
 
 	const modifiers: Array<ts.Modifier> = [];
@@ -57,16 +76,16 @@ export function typeProperty(name: string, definition: TypeDefinition): ts.Prope
 		modifiers.push(ts.factory.createToken(ts.SyntaxKind.ReadonlyKeyword));
 
 	const propertyComments = ts.getSyntheticLeadingComments(node) ?? [];
-	if (propertyComments.length !== 0) ts.setSyntheticLeadingComments(node, []);
+	if (propertyComments.length > 0) ts.setSyntheticLeadingComments(node, []);
 
 	const tsPropertySignature = ts.factory.createPropertySignature(
-		modifiers.length ? modifiers : undefined,
+		modifiers.length > 0 ? modifiers : undefined,
 		name,
 		optional,
 		node
 	);
 
-	return propertyComments.length !== 0
+	return propertyComments.length > 0
 		? ts.setSyntheticLeadingComments(tsPropertySignature, propertyComments)
 		: tsPropertySignature;
 }
@@ -84,12 +103,15 @@ export function typeLiteral(definition: Primitive): ts.LiteralTypeNode;
  *
  * @param definition A object type definition.
  */
-export function typeLiteral(definition: TypeDefinitionObject): ts.TypeLiteralNode;
+export function typeLiteral(
+	definition: TypeDefinitionObject
+): ts.TypeLiteralNode;
 export function typeLiteral(
 	definition: TypeDefinitionObject | Primitive
 ): ts.LiteralTypeNode | ts.TypeLiteralNode;
 export function typeLiteral(definition: TypeDefinitionObject | Primitive) {
-	if (isPrimitive(definition)) return ts.factory.createLiteralTypeNode(runtimeLiteral(definition));
+	if (isPrimitive(definition))
+		return ts.factory.createLiteralTypeNode(runtimeLiteral(definition));
 
 	return ts.factory.createTypeLiteralNode(
 		Object.entries(definition).map(([key, node]) => {

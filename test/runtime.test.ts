@@ -19,7 +19,7 @@ test("numeric", async (tc) => {
 });
 
 test("numeric - nan", async (tc) => {
-	const nanLiteral = runtimeLiteral(NaN);
+	const nanLiteral = runtimeLiteral(Number.NaN);
 	tc.is(nanLiteral.kind, ts.SyntaxKind.NumericLiteral);
 	const result = await t.generate([nanLiteral], { banner: "" });
 	tc.is(result, "\nNaN\n");

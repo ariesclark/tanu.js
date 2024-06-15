@@ -1,4 +1,4 @@
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 
 import * as ts from "typescript";
 export interface GenerateOptions {
@@ -36,8 +36,8 @@ export async function generate(
 
 				resolve(`${options.banner}\n${printedNodes}`);
 			});
-		} catch (error) {
-			reject(error);
+		} catch (reason) {
+			reject(reason);
 		}
 	});
 }

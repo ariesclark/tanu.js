@@ -1,4 +1,4 @@
-import { t } from "./";
+import { t } from ".";
 
 /**
  * A quick demonstration of converting a
@@ -8,15 +8,16 @@ function toTypeScript(name: string, rootObject: Record<string, unknown>) {
 	function recursive(object: Record<string, unknown>): t.TypeDefinitionObject {
 		return Object.fromEntries(
 			Object.entries(object).map(([key, value]) => {
-				if (typeof value === "object") return [key, recursive(value as Record<string, unknown>)];
+				if (typeof value === "object")
+					return [key, recursive(value as Record<string, unknown>)];
 				const kind =
 					typeof value === "string"
 						? t.string()
 						: typeof value === "number"
-						? t.number()
-						: typeof value === "boolean"
-						? t.boolean
-						: t.undefined();
+							? t.number()
+							: typeof value === "boolean"
+								? t.boolean
+								: t.undefined();
 				return [key, kind];
 			})
 		) as t.TypeDefinitionObject;
@@ -54,7 +55,11 @@ void (async () => {
 		}
 	});
 
-	const MemberRole = t.enum("MemberRole", ["DEFAULT", "SPONSOR", "ADMINISTRATOR"]);
+	const MemberRole = t.enum("MemberRole", [
+		"DEFAULT",
+		"SPONSOR",
+		"ADMINISTRATOR"
+	]);
 
 	const Member = t.interface("Member", {
 		user: User,

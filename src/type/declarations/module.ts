@@ -13,11 +13,14 @@ function module_(
 ): ts.ModuleDeclaration {
 	let flags = ts.NodeFlags.None;
 
-	if (name === "global" || options.global) flags |= ts.NodeFlags.GlobalAugmentation;
+	if (name === "global" || options.global)
+		flags |= ts.NodeFlags.GlobalAugmentation;
 	if (options.namespace) flags |= ts.NodeFlags.Namespace;
 
 	return ts.factory.createModuleDeclaration(
-		options.declare ? [ts.factory.createModifier(ts.SyntaxKind.DeclareKeyword)] : undefined,
+		options.declare
+			? [ts.factory.createModifier(ts.SyntaxKind.DeclareKeyword)]
+			: undefined,
 		ts.factory.createIdentifier(name),
 		ts.factory.createModuleBlock(statements),
 		flags

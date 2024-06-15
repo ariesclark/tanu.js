@@ -1,7 +1,8 @@
 import * as ts from "typescript";
 
-import { TypeDefinition } from "..";
 import { toTypeNode } from "../utils";
+
+import type { TypeDefinition } from "..";
 
 /**
  * Create an tuple from array of type definitions.
@@ -14,7 +15,9 @@ export function tuple(definitions: Array<TypeDefinition>): ts.TupleTypeNode;
  * Create a named tuple from an definition object.
  * @param definitions An object, with the property keys used as the tuple entry name.
  */
-export function tuple(definitions: Record<string, TypeDefinition>): ts.TupleTypeNode;
+export function tuple(
+	definitions: Record<string, TypeDefinition>
+): ts.TupleTypeNode;
 export function tuple(
 	definitions: Array<TypeDefinition> | Record<string, TypeDefinition>
 ): ts.TupleTypeNode {
@@ -28,6 +31,6 @@ export function tuple(
 						undefined,
 						toTypeNode(value)
 					);
-			  })
+				})
 	);
 }

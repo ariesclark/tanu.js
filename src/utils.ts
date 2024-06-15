@@ -2,8 +2,13 @@ import * as ts from "typescript";
 
 export type Primitive = string | number | boolean | bigint /*| symbol */;
 
-export const PrimitiveTypes = ["string", "number", "boolean", "bigint" /*, "symbol" */] as const;
-export type PrimitiveTypes = typeof PrimitiveTypes[number];
+export const PrimitiveTypes = [
+	"string",
+	"number",
+	"boolean",
+	"bigint" /*, "symbol" */
+] as const;
+export type PrimitiveTypes = (typeof PrimitiveTypes)[number];
 
 export function isPrimitive(value: unknown): value is Primitive {
 	// @ts-expect-error: Readonly array include wants explicit value.
@@ -19,7 +24,10 @@ export function isNode(value: unknown): value is ts.Node {
 	);
 }
 
-export function setLazy<T extends object>(defaultValue: T, immediateValue: () => T) {
+export function setLazy<T extends object>(
+	defaultValue: T,
+	immediateValue: () => T
+) {
 	let value = defaultValue;
 
 	setImmediate(() => {
